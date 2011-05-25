@@ -1,0 +1,50 @@
+table#a {
+  border-collapse: collapse;
+  text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+table#a td, table#a th {
+  font-size: 1em;
+  border: 1px solid black;
+  padding: 1px 7px 1px 7px;
+  vertical-align: middle;
+}
+table#a th {
+  font-size: 1.1em;
+  text-align: center;
+  background-color: gray;
+  color: white;
+  vertical-align: middle;
+}
+
+table#legend {
+  border-collapse: collapse;
+  text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+  margin: 6px 0px 0px 0px;
+}
+table#legend td, table#legend th {
+  font-size: 1em;
+  border: 1px solid black;
+  padding: 1px 7px 1px 7px;
+  vertical-align: middle;
+}
+table#legend th {
+  font-size: 1em;
+  text-align: center;
+  background-color: gray;
+  color: white;
+  vertical-align: middle;
+}
+
+img {
+  border: none;
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 0.7em;
+}
+
