@@ -1,5 +1,6 @@
 
 function initialize(gotPos) {
+
   if (gotPos) {
     var myOptions = {
       zoom: 12,
@@ -13,6 +14,7 @@ function initialize(gotPos) {
     var flightPlanCoordinates = [];
     var marker = [];
     var flightPath = [];
+    var locations = [];
 
     for (j = 0; j < numDatas; ++j) {
       flightPlanCoordinates[j] = [];
@@ -27,6 +29,7 @@ function initialize(gotPos) {
       });
       flightPath[j].setMap(map);
       marker[j] = new google.maps.Marker({position: flightPlanCoordinates[j][0], map: map});
+
     }
   }
 
@@ -42,8 +45,8 @@ function initialize(gotPos) {
         choiceContainer.append('<br>');
       $.each(datasets, function(key, val) {
         choiceContainer.append('<input type="checkbox" name="' + key + j +
-                               '" checked="checked"' +
-                               //(key != "distance" ? '" checked="checked"' : '') +
+                               //'" checked="checked"' +
+                               (key != "distance" ? '" checked="true"' : '" ') +
                                ' id="id' + key + j + '">' +
                                '<label for="id' + key + j + '">'
                                 + val.label + '</label>');
@@ -120,6 +123,75 @@ function initialize(gotPos) {
       });
     }
   }
+
+  function updateAltitude() {
+    for (j = 0; j < numDatas; j++) {
+
+      // downsample to at most 512 coordinates
+      locations=[];
+      var numPts = Math.max(512, flightPlanCoordinates[j].length);
+      for (i = 0; i < numPts; ++i) {
+        index = Math.ceil(i*(flightPlanCoordinates[j].length-1)/numPts);
+        if (flightPlanCoordinates[j][index])
+          locations[i] = flightPlanCoordinates[j][index];
+      }
+
+      /*
+      var evRequest = {'locations': locations[j] };
+      elSvc = new google.maps.ElevationService();
+      elSvc.getElevationForLocations(evRequest, function(results, status) {
+        if (status == google.maps.ElevationStatus.OK) {
+          elevationData[j] = [];
+          for (i = 0; i < results.length; ++i)
+            elevationData[j][i] = results[i].elevation;
+        }
+      });
+      */
+
+      // get elevations      
+      var pathRequest = {'path': locations, 'samples': numPts };
+      elSvc = new google.maps.ElevationService();
+      elSvc.getElevationAlongPath(pathRequest, function(results, status) {
+        if (status != google.maps.ElevationStatus.OK) {
+          alert('getElevationAlongPath returned ' + status);
+          return;
+        }
+
+        var elevationData = [];
+        for (i = 0; i < results.length; ++i)
+          elevationData[i] = results[i].elevation;
+
+        if (elevationData.length == 0) {
+          alert('getElevationAlongPath empty');
+          return;
+        }
+
+        // height data is returned sampled equidistant along the length of the path
+        var dist = datasets["distance"].data;
+        var altitude = datasets["altitude"].data;
+
+        var maxdist = dist[j][dist[j].length-1];
+        for (k = 0; k < altitude[j].length; k++) {
+          var f_idx = k / altitude[j].length;
+          var idx1 = Math.floor(f_idx);
+          var mix = f_idx - idx1;
+          var d1 = elevationData[idx1];
+          var d2;
+          if (idx1+1 < elevationData.length)
+            d2 = elevationData[idx1+1];
+          else
+            d2 = d1;
+          elevationData[k] = (1.0-mix) * d1 + mix*d2;
+        }
+
+        altitude[j] = elevationData;
+        datasets["altitude"].data = altitude;
+
+        plotAccordingToChoices();
+      });
+    }
+  }
+
 
   var updateTimeout = null;
   var latestPosition = null;
@@ -303,6 +375,8 @@ function initialize(gotPos) {
       rangemax = Math.max(rangemax, distanceData[j][distanceData[j].length-1]);
     plotAccordingToChoices();
   });
+
+  $("#updatealt").click(updateAltitude);
 
   // default range: min and max distance over all measuers
 
