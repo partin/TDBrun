@@ -4,6 +4,7 @@
 #include "parsetcx.h"
 #include <string>
 #include <algorithm>
+#include <iomanip>
 
 namespace {
 
@@ -42,7 +43,7 @@ namespace {
     std::stringstream ss;
     ss << "  " << name << " = [" << Getter::get(tps[0]);
     for (size_t i = 1; i < tps.size(); ++i)
-      ss << "," << Getter::get(tps[i]);
+      ss << "," << std::setprecision(5) << Getter::get(tps[i]);
     ss << "];\n";
 
   //  string minname = "min"+name;
@@ -322,6 +323,7 @@ public:
     out << "<button id=\"zoomout\">Zoom Out</button>" "\n";
     out << "<button id=\"plotvstime\">Plot vs Time</button>" "\n";
     out << "<button id=\"plotvsdistance\">Plot vs Distance</button>" "\n";
+    out << "<button id=\"updatealt\">Altitude</button>" "\n";
     //out << "<div id=\"legend\" style=\"width:80%;height:300px\"></div>" "\n";
     out << "<p id=\"choices\"></p>" "\n";
     out << "</center>" "\n";

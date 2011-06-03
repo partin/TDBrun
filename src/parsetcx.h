@@ -38,6 +38,9 @@ public:
   std::string getLatitude() const { return latitude; }
   std::string getLongitude() const { return longitude; }
 
+  std::string getRawAltitude() const { return altitude; }
+  void setAltitude(const std::string &s) { altitude = s; }
+
   void clear() {
     time.clear();
     distance.clear();

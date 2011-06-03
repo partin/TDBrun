@@ -1,5 +1,6 @@
 #include "parse.h"
 #include "parsetcx.h"
+#include "parsegpx.h"
 #include "matlabout.h"
 #include "htmloutflot.h"
 
@@ -18,8 +19,8 @@ int main(int argc, char *argv[]) {
   if (argc < 2) {
     //cerr << "Usage: " << argv[0] << " <filename>" << endl;
     //return 1;
-    filenames.push_back("C:\\Dokument\\Projects\\ParseTCX\\Debug\\2010-08-11-172327.TCX");
-    filenames.push_back("C:\\Dokument\\Projects\\ParseTCX\\Debug\\2010-08-11-Stefan.tcx");
+    filenames.push_back("C:\\Dokument\\Projects\\ParseTCX\\Debug\\2011-05-31-Martin.tcx");
+    filenames.push_back("C:\\Dokument\\Projects\\ParseTCX\\Debug\\2011-05-31-Magnus.tcx");
   }
   else {
     for (int i = 1; i < argc; ++i)
@@ -42,6 +43,28 @@ int main(int argc, char *argv[]) {
       cerr << "Failed to parse" << endl;
       return 1;
     }
+
+    Parser pgpx;
+    string gpxfile = filenames[i].substr(0, filenames[i].length()-4) + ".gpx";
+    if (pgpx.readFile(gpxfile.c_str())) {
+      ParseGPX gpx;
+      if (gpx.parse(pgpx.result) && !gpx.altitude.empty()) {
+        size_t num = 0;
+        for (size_t j = 0; j < data[i].trackpoints.size(); ++j) {
+          if (!data[i].trackpoints[j].getAltitude().empty())
+            ++num;
+        }
+        if (num == gpx.altitude.size()) {
+          num = 0;
+          for (size_t j = 0; j < data[i].trackpoints.size(); ++j) {
+            if (!data[i].trackpoints[j].getAltitude().empty())
+              data[i].trackpoints[j].setAltitude(gpx.altitude[num++]);
+          }
+        }
+      }
+    }
+
+
 
     outname = data[i].getDate();
     for (size_t i = 0; i < outname.size(); ++i)
