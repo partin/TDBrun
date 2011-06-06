@@ -200,7 +200,8 @@ public:
         inTrackpoint = false;
       }
     }
-
+    if (trackpoints.empty())
+      return false;
     for (size_t i = 0; i < trackpoints.size(); ++i) {
       double speed = atof(trackpoints[i].speed.c_str());
       if (speed > maxSpeed)
