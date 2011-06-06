@@ -40,7 +40,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (!data[i].parse(p.result)) {
-      cerr << "Failed to parse" << endl;
+      cerr << "Failed to parse \"" << filenames[i] << "\"" << endl;
       return 1;
     }
 
