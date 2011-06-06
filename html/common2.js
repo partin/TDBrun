@@ -143,14 +143,13 @@ function initialize(gotPos) {
         return;
     }
 
-    // height data is returned sampled equidistant along the length of the path
-    var dist = datasets["distance"].data;
+
     var altitude = datasets["altitude"].data;
     var j = globalIndex;
-    var mylen = dist[j].length-1;
-
-    var maxdist = dist[j][mylen];
     var newElevData = [];
+
+/*
+    // height data sampled uniformly along the position vector
 
     for (k = 0; k < altitude[j].length; k++) {
         var f_idx = (k / (altitude[j].length-1)) * (elevationData.length-1);
@@ -160,6 +159,28 @@ function initialize(gotPos) {
         var d2;
         if (idx1+1 < elevationData.length)
           d2 = elevationData[idx1+1];
+        else
+          d2 = d1;
+        newElevData[k] = (1.0-mix) * d1 + mix*d2;
+    }
+*/    
+    
+    // height data is returned sampled equidistant along the length of the path
+
+    var dist = datasets["distance"].data;
+    var mylen = dist[j].length-1;
+    var maxdist = dist[j][mylen];
+
+    var idxbah=[];
+    for (k = 0; k < dist[j].length; k++) {
+        var cdist = dist[j][k] / maxdist;
+        var f_elevidx = cdist * (elevationData.length-1);
+        var elevidx = Math.floor(f_elevidx);
+        var mix = f_elevidx - elevidx;
+        var d1 = elevationData[elevidx];
+        var d2;
+        if (elevidx + 1 < elevationData.length)
+          d2 = elevationData[elevidx+1];
         else
           d2 = d1;
         newElevData[k] = (1.0-mix) * d1 + mix*d2;
