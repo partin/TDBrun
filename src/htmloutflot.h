@@ -125,11 +125,14 @@ public:
 "<meta http-equiv=\"content-type\" content=\"text/html; charset=utf-8\" />" "\n"
 "<title>Running " << date << "</title>" "\n"
 "<script type=\"text/javascript\" src=\"http://www.google.com/jsapi\"></script>" "\n"
-"<script language=\"javascript\" type=\"text/javascript\" src=\"js/jquery.js\"></script>" "\n"
+"<link rel=\"stylesheet\" href=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/themes/base/jquery-ui.css\" type=\"text/css\" media=\"all\" />" "\n"
+"<script src=\"http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js\" type=\"text/javascript\"></script>" "\n"
+"<script src=\"http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js\" type=\"text/javascript\"></script>" "\n"
 "<script language=\"javascript\" type=\"text/javascript\" src=\"js/jquery.flot.js\"></script>" "\n"
 "<script language=\"javascript\" type=\"text/javascript\" src=\"js/jquery.flot.crosshair.js\"></script>" "\n"
 "<script language=\"javascript\" type=\"text/javascript\" src=\"js/jquery.flot.selection.js\"></script>" "\n"
 "<script language=\"javascript\" type=\"text/javascript\" src=\"js/jquery.flot.navigate.js\"></script>" "\n";
+
     if (gotPosition) out <<
 "<script type=\"text/javascript\" src=\"http://maps.google.com/maps/api/js?sensor=false\"></script>" "\n";
 
@@ -295,8 +298,11 @@ public:
 
     out << "</tr>" "\n" "</table>" "\n" "\n" "<br>" "\n" "\n";
 
-    if (gotPosition)
-      out << "<div id=\"map_canvas\" style=\"width: 80%; height: 300px;\"></div>" "\n";
+    if (gotPosition) {
+      out << "<div id=\"resizable1\" style=\"width: 80%; height: 300px; padding: 0.5em;\" class=\"ui-widget-content\">" "\n";
+      out << "<div id=\"map_canvas\" style=\"width: 100%; height: 100%;\"></div>" "\n";
+      out << "</div>" "\n";
+    }
     //out << "Time: <span id='spantime'>00:00:00</span>" "\n";
     out << "<table id=\"legend\">" "\n";
     out << "<tr><th>Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>"
@@ -319,7 +325,11 @@ public:
       out << "</tr>" "\n";
     }
     out << "</table>" "\n";
-    out << "<div id=\"placeholder\" style=\"width:80%;height:300px\"></div>" "\n";
+
+    out << "<div id=\"resizable2\" style=\"width: 80%; height: 300px; padding: 0.5em;\" class=\"ui-widget-content\">" "\n";
+    out << "<div id=\"placeholder\" style=\"width: 100%; height: 100%\"></div>" "\n";
+    out << "</div>" "\n";
+
     out << "<button id=\"zoomout\">Zoom Out</button>" "\n";
     out << "<button id=\"plotvstime\">Plot vs Time</button>" "\n";
     out << "<button id=\"plotvsdistance\">Plot vs Distance</button>" "\n";

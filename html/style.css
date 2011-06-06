@@ -43,6 +43,11 @@ img {
   border: none;
 }
 
+.ghosthelper {
+  background-color: white;
+  border: 2px solid black;
+}
+
 .note {
   margin-top: 10px;
   font-size: 0.7em;

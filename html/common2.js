@@ -1,6 +1,6 @@
 
 function initialize(gotPos) {
-
+  var map;
   if (gotPos) {
     var myOptions = {
       zoom: 12,
@@ -8,7 +8,7 @@ function initialize(gotPos) {
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+    map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
 
     var colors = ["#FF0000", "#0000FF", "#008000", "#808000", "#800080", "#008080"];
     var flightPlanCoordinates = [];
@@ -242,6 +242,8 @@ function initialize(gotPos) {
     return (this.match("^"+str) == str)
   }
 
+  function redrawPlot() { plot.draw(); }
+
   function updatePlot() {
     updateTimeout = null;
 
@@ -429,6 +431,15 @@ function initialize(gotPos) {
     rangemax = Math.max(rangemax, startTime[j]+time[j][time[j].length-1]);
   rangemin += 2*60*60*1000;
   rangemax += 2*60*60*1000;
+
+		$( "#resizable1" ).resizable({
+		  stop: function(event, ui) { google.maps.event.trigger(map, "resize"); }
+		});
+		$( "#resizable2" ).resizable({
+		  ghost: true,
+		  helper: 'ghosthelper',
+      stop: function(event, ui) { plotAccordingToChoices(); }
+    });
 
   plotAccordingToChoices();
 }
