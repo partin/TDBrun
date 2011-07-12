@@ -30,6 +30,8 @@ function initialize(gotPos) {
       flightPath[j].setMap(map);
       marker[j] = new google.maps.Marker({position: flightPlanCoordinates[j][0], map: map});
 
+      if (typeof(icons) !== 'undefined' && icons.length > j && icons[j] !== null)
+        marker[j].setIcon(new google.maps.MarkerImage(icons[j]));
     }
   }
 
