@@ -126,3 +126,14 @@ public:
     }
   }
 };
+
+#ifdef max
+#undef max
+#endif
+#ifdef min
+#undef min
+#endif
+#ifdef abs
+#undef abs
+#endif
+

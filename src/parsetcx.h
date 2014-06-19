@@ -8,6 +8,7 @@
 #include <vector>
 #include <sstream>
 #include <iomanip>
+#include <cstdlib>
 
 class ParseTCX;
 
